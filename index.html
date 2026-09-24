@@ -1539,7 +1539,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   syncTheme();
 })();
 &lt;/script&gt;
-&lt;div id=&quot;tangier-bus-map&quot;&gt;
+&lt;div id=&quot;tangier-bus-map&quot; data-location-bridge=&quot;true&quot;&gt;
   &lt;h2&gt;Автобусы Танжера&lt;/h2&gt;
   &lt;details id=&quot;tgr-lines-panel&quot; open&gt;
     &lt;summary&gt;Линии &lt;span id=&quot;tgr-selection-count&quot; class=&quot;text-small&quot;&gt;&lt;/span&gt;&lt;/summary&gt;
@@ -1550,11 +1550,13 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;div id=&quot;tgr-lines&quot; class=&quot;tgr-lines&quot; role=&quot;group&quot; aria-label=&quot;Линии автобусов&quot;&gt;&lt;/div&gt;
   &lt;/details&gt;
   &lt;div class=&quot;viz-controls tgr-selection-options&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; id=&quot;tgr-locate&quot;&gt;Где я&lt;/button&gt;
     &lt;label class=&quot;form-check&quot;&gt;&lt;input id=&quot;tgr-city&quot; type=&quot;checkbox&quot; class=&quot;form-check-input&quot;&gt;&lt;span class=&quot;form-check-label&quot;&gt;Городская часть&lt;/span&gt;&lt;/label&gt;
     &lt;label id=&quot;tgr-direction-label&quot; class=&quot;form-label&quot; hidden&gt;Направление
       &lt;select id=&quot;tgr-direction&quot; class=&quot;form-select&quot; aria-label=&quot;Выбрать направление&quot;&gt;&lt;/select&gt;
     &lt;/label&gt;
   &lt;/div&gt;
+  &lt;div id=&quot;tgr-location-status&quot; class=&quot;text-small&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
   &lt;div class=&quot;tgr-map-wrap&quot;&gt;
     &lt;svg id=&quot;tgr-svg&quot; role=&quot;img&quot; aria-label=&quot;Карта автобусных маршрутов Танжера. Масштаб меняется кнопками или жестом двумя пальцами.&quot;&gt;&lt;/svg&gt;
     &lt;div class=&quot;tgr-zoom&quot;&gt;
@@ -1684,13 +1686,73 @@ html&gt;body{padding:0}&lt;/style&gt;
   const routeLayer=svg.append(&#x27;g&#x27;);
   const stopLayer=svg.append(&#x27;g&#x27;);
   const labelLayer=svg.append(&#x27;g&#x27;).attr(&#x27;pointer-events&#x27;,&#x27;none&#x27;);
+  const locationLayer=svg.append(&#x27;g&#x27;).attr(&#x27;pointer-events&#x27;,&#x27;none&#x27;);
   const scaleLayer=svg.append(&#x27;g&#x27;).attr(&#x27;pointer-events&#x27;,&#x27;none&#x27;);
   let mode=&#x27;multiple&#x27;,active=[],activeStops=[],width=0,height=0,baseProjection,currentProjection,path;
+  let userLocation=null;
   let transform=d3.zoomIdentity,selectedStop=null,pressPoint=null;
   const zoom=d3.zoom().scaleExtent([0.65,55]).on(&#x27;zoom&#x27;,event=&gt;{transform=event.transform;draw();});
   svg.call(zoom).on(&#x27;dblclick.zoom&#x27;,null);
   root.querySelector(&#x27;#tgr-plus&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;svg.call(zoom.scaleBy,1.65));
   root.querySelector(&#x27;#tgr-minus&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;svg.call(zoom.scaleBy,1/1.65));
+
+  const locateButton=root.querySelector(&#x27;#tgr-locate&#x27;);
+  const locationStatus=root.querySelector(&#x27;#tgr-location-status&#x27;);
+  let locationRequest=null,locationTimer=null;
+  function finishLocation(result){
+    clearTimeout(locationTimer);locationRequest=null;locateButton.disabled=false;locateButton.textContent=&#x27;Где я&#x27;;
+    if(result.error){
+      userLocation=null;draw();
+      const messages={
+        1:&#x27;Доступ к геопозиции закрыт. Разрешите его в настройках браузера. В чате функция может быть недоступна — откройте отдельную карту в браузере.&#x27;,
+        2:&#x27;Не удалось определить место. Проверьте, включена ли геолокация на телефоне, и попробуйте ещё раз.&#x27;,
+        3:&#x27;Определение места заняло слишком долго. Попробуйте ещё раз.&#x27;,
+        unsupported:&#x27;Геопозиция недоступна здесь. Откройте карту в браузере по HTTPS.&#x27;
+      };
+      locationStatus.textContent=messages[result.error]||messages[2];return;
+    }
+    const {longitude,latitude,accuracy}=result;
+    if(![longitude,latitude,accuracy].every(Number.isFinite)||Math.abs(longitude)&gt;180||Math.abs(latitude)&gt;90||accuracy&lt;0){finishLocation({error:2});return;}
+    const outside=longitude&lt;data.bounds[0]||longitude&gt;data.bounds[2]||latitude&lt;data.bounds[1]||latitude&gt;data.bounds[3];
+    if(outside){userLocation=null;draw();locationStatus.textContent=&#x27;Вы за пределами карты Танжера. Маршруты показаны только для города и окрестностей.&#x27;;return;}
+    userLocation={point:[longitude,latitude],accuracy};
+    const time=new Date().toLocaleTimeString(&#x27;ru-RU&#x27;,{hour:&#x27;2-digit&#x27;,minute:&#x27;2-digit&#x27;});
+    locationStatus.textContent=&#x27;Вы здесь · точность ±&#x27;+Math.round(accuracy)+&#x27; м · &#x27;+time+&#x27;. Обновить — «Где я».&#x27;;
+    if(baseProjection){
+      const p=baseProjection(userLocation.point),k=Math.min(55,Math.max(1,600000/baseProjection.scale()));
+      svg.call(zoom.transform,d3.zoomIdentity.translate(width/2-k*p[0],height/2-k*p[1]).scale(k));
+    }
+    draw();
+  }
+  locateButton.addEventListener(&#x27;click&#x27;,()=&gt;{
+    userLocation=null;draw();locateButton.disabled=true;locateButton.textContent=&#x27;Определяю…&#x27;;locationStatus.textContent=&#x27;Ожидаем геопозицию и разрешение браузера…&#x27;;
+    locationRequest=String(Date.now())+&#x27;-&#x27;+Math.random().toString(36).slice(2);
+    const requestId=locationRequest;
+    locationTimer=setTimeout(()=&gt;{if(locationRequest===requestId)finishLocation({error:3});},20000);
+    if(root.dataset.locationBridge===&#x27;true&#x27;){
+      window.parent.postMessage({type:&#x27;tangier:locate&#x27;,requestId},&#x27;*&#x27;);return;
+    }
+    if(!window.isSecureContext||!navigator.geolocation){finishLocation({error:&#x27;unsupported&#x27;});return;}
+    try{
+      navigator.geolocation.getCurrentPosition(
+        position=&gt;{if(locationRequest===requestId)finishLocation({longitude:position.coords.longitude,latitude:position.coords.latitude,accuracy:position.coords.accuracy});},
+        error=&gt;{if(locationRequest===requestId)finishLocation({error:error.code});},
+        {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+      );
+    }catch(error){finishLocation({error:1});}
+  });
+  window.addEventListener(&#x27;message&#x27;,event=&gt;{
+    if(root.dataset.locationBridge!==&#x27;true&#x27;||event.source!==window.parent||!locationRequest||event.data?.type!==&#x27;tangier:location&#x27;||event.data.requestId!==locationRequest)return;
+    finishLocation(event.data.result);
+  });
+  function drawLocation(){
+    locationLayer.selectAll(&#x27;*&#x27;).remove();
+    if(!userLocation)return;
+    const p=currentProjection(userLocation.point);if(!inside(p,8))return;
+    const area=d3.geoCircle().center(userLocation.point).radius(Math.min(userLocation.accuracy/6371000*180/Math.PI,180))();
+    locationLayer.append(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-location-accuracy&#x27;).attr(&#x27;d&#x27;,path(area)).attr(&#x27;fill&#x27;,&#x27;var(--viz-series-1)&#x27;).attr(&#x27;opacity&#x27;,0.16);
+    locationLayer.append(&#x27;circle&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-location-marker&#x27;).attr(&#x27;cx&#x27;,p[0]).attr(&#x27;cy&#x27;,p[1]).attr(&#x27;r&#x27;,7).attr(&#x27;fill&#x27;,&#x27;var(--viz-series-1)&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--background)&#x27;).attr(&#x27;stroke-width&#x27;,3);
+  }
 
   function choose(){
     mode=selectedRefs.size===1?[...selectedRefs][0]:&#x27;multiple&#x27;;selectedStop=null;stopDetail.replaceChildren();
@@ -1757,12 +1819,13 @@ html&gt;body{padding:0}&lt;/style&gt;
       const shown=activeStops.map(id=&gt;({id,p:currentProjection(data.stops[id])})).filter(d=&gt;inside(d.p,5));
       stopLayer.selectAll(&#x27;circle&#x27;).data(shown).join(&#x27;circle&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-stop&#x27;).attr(&#x27;cx&#x27;,d=&gt;d.p[0]).attr(&#x27;cy&#x27;,d=&gt;d.p[1]).attr(&#x27;r&#x27;,d=&gt;d.id===selectedStop?6:3.2).attr(&#x27;stroke&#x27;,color(mode));
     }
-    drawLabels();drawScale();
+    drawLabels();drawLocation();drawScale();
     svg.attr(&#x27;data-ready&#x27;,&#x27;true&#x27;).attr(&#x27;data-mode&#x27;,mode).attr(&#x27;data-route-count&#x27;,new Set(active.map(r=&gt;r.ref)).size).attr(&#x27;data-stop-count&#x27;,activeStops.length);
   }
   function drawLabels(){
     labelLayer.selectAll(&#x27;*&#x27;).remove();
     const candidates=[];
+    if(userLocation){const p=currentProjection(userLocation.point);if(inside(p,8))candidates.push({p,text:&#x27;Вы здесь&#x27;,priority:-1});}
     const labelStops=selectedRefs.size&lt;=6?active.flatMap(r=&gt;[r.stops[0],r.stops.at(-1)]).filter(id=&gt;id!==undefined):[];
     if(selectedStop!==null)labelStops.unshift(selectedStop);
     const seen=[];
@@ -2556,6 +2619,27 @@ html&gt;body{padding:0}&lt;/style&gt;
       "<\/script>",
   );
   delete frame.dataset.srcdoc;
+})();
+</script>
+<script>// The exported document owns the browser permission prompt; its sandboxed map
+// receives only the result of the user's explicit location request.
+(()=>{
+  let busy=false;
+  window.addEventListener('message',event=>{
+    const frame=document.querySelector('iframe');
+    if(!frame||event.source!==frame.contentWindow||event.data?.type!=='tangier:locate'||typeof event.data.requestId!=='string'||event.data.requestId.length>100||busy)return;
+    const requestId=event.data.requestId,target=event.source;
+    const reply=result=>{busy=false;target.postMessage({type:'tangier:location',requestId,result},'*');};
+    if(!window.isSecureContext||!navigator.geolocation){reply({error:'unsupported'});return;}
+    busy=true;
+    try{
+      navigator.geolocation.getCurrentPosition(
+        position=>reply({longitude:position.coords.longitude,latitude:position.coords.latitude,accuracy:position.coords.accuracy}),
+        error=>reply({error:error.code}),
+        {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+      );
+    }catch(error){reply({error:1});}
+  });
 })();
 </script>
 </body>
