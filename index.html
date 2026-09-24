@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Автобусы Танжера</title>
+<title>Танжер — автобусы, достопримечательности и прогулки</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
@@ -1249,7 +1249,13 @@ svg.lucide {
   color: var(--destructive);
 }
 
-html&gt;body{padding:0}&lt;/style&gt;
+html&gt;body{padding:0}
+#tgr-places-panel{margin:12px 0}#tgr-poi-filters{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}#tgr-poi-filters label{display:flex;align-items:center;gap:5px;min-height:36px;cursor:pointer}#tgr-poi-filters input{width:18px;height:18px}
+#tgr-poi-list{display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow:auto}#tgr-poi-list .btn{min-height:40px;white-space:normal;text-align:left;justify-content:flex-start}
+#tgr-poi-card{padding:14px;margin:12px 0;border:1px solid var(--border);border-radius:12px;background:var(--card)}#tgr-poi-card h3{margin:0 0 6px}#tgr-poi-card p{margin:6px 0}#tgr-poi-card .poi-links{display:flex;flex-wrap:wrap;gap:12px}#tgr-poi-card .poi-close{float:right}
+.tgr-poi-marker{cursor:pointer;outline:none}.tgr-poi-marker:focus circle{stroke:#111;stroke-width:4px}.tgr-poi-marker text{font:700 11px system-ui;fill:white;pointer-events:none}
+@media(max-width:480px){#tgr-poi-list{max-height:190px}}
+&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
@@ -1540,7 +1546,8 @@ html&gt;body{padding:0}&lt;/style&gt;
 })();
 &lt;/script&gt;
 &lt;div id=&quot;tangier-bus-map&quot; data-location-bridge=&quot;true&quot;&gt;
-  &lt;h2&gt;Автобусы Танжера&lt;/h2&gt;
+  &lt;h2&gt;Танжер · автобусы и места&lt;/h2&gt;
+  &lt;p class=&quot;text-small text-muted&quot;&gt;Номера на карте — интересные места. Нажмите на точку или раскройте список.&lt;/p&gt;
   &lt;details id=&quot;tgr-lines-panel&quot; open&gt;
     &lt;summary&gt;Линии &lt;span id=&quot;tgr-selection-count&quot; class=&quot;text-small&quot;&gt;&lt;/span&gt;&lt;/summary&gt;
     &lt;div class=&quot;viz-row tgr-selection-options&quot;&gt;
@@ -1549,9 +1556,21 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;/div&gt;
     &lt;div id=&quot;tgr-lines&quot; class=&quot;tgr-lines&quot; role=&quot;group&quot; aria-label=&quot;Линии автобусов&quot;&gt;&lt;/div&gt;
   &lt;/details&gt;
+
+  &lt;details id=&quot;tgr-places-panel&quot;&gt;
+    &lt;summary&gt;Места в Танжере · &lt;span id=&quot;tgr-poi-count&quot;&gt;16&lt;/span&gt;&lt;/summary&gt;
+    &lt;div id=&quot;tgr-poi-filters&quot; class=&quot;tgr-poi-filters&quot; role=&quot;group&quot; aria-label=&quot;Категории мест&quot;&gt;
+      &lt;label&gt;&lt;input type=&quot;checkbox&quot; value=&quot;sight&quot; checked&gt; &lt;span style=&quot;color:#b65c10&quot;&gt;◆&lt;/span&gt; Достопримечательности&lt;/label&gt;
+      &lt;label&gt;&lt;input type=&quot;checkbox&quot; value=&quot;busy&quot; checked&gt; &lt;span style=&quot;color:#a83b83&quot;&gt;●&lt;/span&gt; Оживлённые места&lt;/label&gt;
+      &lt;label&gt;&lt;input type=&quot;checkbox&quot; value=&quot;walk&quot; checked&gt; &lt;span style=&quot;color:#16846a&quot;&gt;▲&lt;/span&gt; Прогулки и виды&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;p class=&quot;text-small text-muted&quot;&gt;«Оживлённые» — популярные места для прогулок, кафе и встреч. Это не данные о людях сейчас. Точки независимы от выбранных автобусов.&lt;/p&gt;
+    &lt;div id=&quot;tgr-poi-list&quot; class=&quot;tgr-poi-list&quot;&gt;&lt;/div&gt;
+  &lt;/details&gt;
   &lt;div class=&quot;viz-controls tgr-selection-options&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; id=&quot;tgr-center&quot;&gt;Центр и места&lt;/button&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn&quot; id=&quot;tgr-locate&quot;&gt;Где я&lt;/button&gt;
-    &lt;label class=&quot;form-check&quot;&gt;&lt;input id=&quot;tgr-city&quot; type=&quot;checkbox&quot; class=&quot;form-check-input&quot;&gt;&lt;span class=&quot;form-check-label&quot;&gt;Городская часть&lt;/span&gt;&lt;/label&gt;
+    &lt;label class=&quot;form-check&quot;&gt;&lt;input id=&quot;tgr-city&quot; type=&quot;checkbox&quot; checked class=&quot;form-check-input&quot;&gt;&lt;span class=&quot;form-check-label&quot;&gt;Городская часть&lt;/span&gt;&lt;/label&gt;
     &lt;label id=&quot;tgr-direction-label&quot; class=&quot;form-label&quot; hidden&gt;Направление
       &lt;select id=&quot;tgr-direction&quot; class=&quot;form-select&quot; aria-label=&quot;Выбрать направление&quot;&gt;&lt;/select&gt;
     &lt;/label&gt;
@@ -1564,6 +1583,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       &lt;button type=&quot;button&quot; class=&quot;btn&quot; id=&quot;tgr-minus&quot; aria-label=&quot;Отдалить карту&quot;&gt;−&lt;/button&gt;
     &lt;/div&gt;
   &lt;/div&gt;
+  &lt;section id=&quot;tgr-poi-card&quot; hidden aria-live=&quot;polite&quot;&gt;&lt;/section&gt;
   &lt;div id=&quot;tgr-detail&quot; class=&quot;tgr-detail&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
   &lt;div id=&quot;tgr-stop-detail&quot; class=&quot;tgr-stop-detail text-small&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
   &lt;details id=&quot;tgr-stops-panel&quot; hidden&gt;
@@ -1614,6 +1634,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 (() =&gt; {
   const root = document.getElementById(&#x27;tangier-bus-map&#x27;);
   const data = JSON.parse(document.getElementById(&#x27;tgr-data&#x27;).textContent);
+  const pois = [{&quot;id&quot;:&quot;grand-socco&quot;,&quot;name&quot;:&quot;Гранд-Сокко&quot;,&quot;category&quot;:&quot;busy&quot;,&quot;lon&quot;:-5.81318,&quot;lat&quot;:35.7843,&quot;description&quot;:&quot;Площадь у входа в медину: кафе, городской поток и начало прогулки по старому городу.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/relation/8060947&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/en/travel/tangier/medina&quot;,&quot;positionNote&quot;:&quot;Ориентир на площади&quot;,&quot;number&quot;:1,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;petit-socco&quot;,&quot;name&quot;:&quot;Пти-Сокко&quot;,&quot;category&quot;:&quot;busy&quot;,&quot;lon&quot;:-5.8105922,&quot;lat&quot;:35.7854895,&quot;description&quot;:&quot;Небольшая площадь в медине с кафе и торговыми улочками.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/7264460717&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/en/travel/tangier/medina&quot;,&quot;positionNote&quot;:&quot;Площадь&quot;,&quot;number&quot;:2,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;kasbah&quot;,&quot;name&quot;:&quot;Касба&quot;,&quot;category&quot;:&quot;sight&quot;,&quot;lon&quot;:-5.8134345,&quot;lat&quot;:35.7887531,&quot;description&quot;:&quot;Историческая крепость над мединой. Подъём по улочкам и виды на город и пролив.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/2377506756&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/en/travel/tangier/medina&quot;,&quot;positionNote&quot;:&quot;Ориентир в районе Касбы&quot;,&quot;number&quot;:3,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;legation&quot;,&quot;name&quot;:&quot;Американская легация&quot;,&quot;category&quot;:&quot;sight&quot;,&quot;lon&quot;:-5.8108843,&quot;lat&quot;:35.7838627,&quot;description&quot;:&quot;Музей в здании американской дипломатической миссии. Часы посещения и стоимость проверьте перед входом.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/2328215993&quot;,&quot;source&quot;:&quot;https://legation.org/&quot;,&quot;positionNote&quot;:&quot;Музей&quot;,&quot;number&quot;:4,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;cinema-rif&quot;,&quot;name&quot;:&quot;Cinema Rif&quot;,&quot;category&quot;:&quot;sight&quot;,&quot;lon&quot;:-5.8130683,&quot;lat&quot;:35.7838283,&quot;description&quot;:&quot;Кинотеатр у Гранд-Сокко. Место для культурной остановки; сеансы требуют отдельной проверки.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/2572753210&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/ar/رحلة/طنجة/شاطئ-بحر&quot;,&quot;positionNote&quot;:&quot;Кинотеатр&quot;,&quot;number&quot;:5,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;hafa&quot;,&quot;name&quot;:&quot;Café Hafa&quot;,&quot;category&quot;:&quot;busy&quot;,&quot;lon&quot;:-5.8219757,&quot;lat&quot;:35.7914,&quot;description&quot;:&quot;Террасы с видом на Гибралтарский пролив, чай и популярная остановка для прогулки.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/2856148906&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/en/travel/tangier/medina&quot;,&quot;positionNote&quot;:&quot;Кафе&quot;,&quot;number&quot;:6,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;phoenician&quot;,&quot;name&quot;:&quot;Финикийские гробницы&quot;,&quot;category&quot;:&quot;sight&quot;,&quot;lon&quot;:-5.8201253,&quot;lat&quot;:35.790974,&quot;description&quot;:&quot;Археологическое место у скал и вид на пролив рядом с Café Hafa.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/8847621694&quot;,&quot;source&quot;:&quot;https://www.openstreetmap.org/node/8847621694&quot;,&quot;positionNote&quot;:&quot;Археологическое место&quot;,&quot;number&quot;:7,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;terrasse&quot;,&quot;name&quot;:&quot;Терраса ленивцев&quot;,&quot;category&quot;:&quot;walk&quot;,&quot;lon&quot;:-5.8117936,&quot;lat&quot;:35.7808623,&quot;description&quot;:&quot;Terrasse des Paresseux: городская смотровая площадка с видом в сторону порта.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/7264187086&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/sites/default/files/atoms/files/Tanger%20FR.pdf&quot;,&quot;positionNote&quot;:&quot;Смотровая&quot;,&quot;number&quot;:8,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;france&quot;,&quot;name&quot;:&quot;Площадь Франции / Пастер&quot;,&quot;category&quot;:&quot;busy&quot;,&quot;lon&quot;:-5.8126235,&quot;lat&quot;:35.7808356,&quot;description&quot;:&quot;Кафе и городской променад на Boulevard Pasteur рядом со смотровой площадкой.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/way/1432384549&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/sites/default/files/atoms/files/Tanger%20FR.pdf&quot;,&quot;positionNote&quot;:&quot;Ориентир на площади&quot;,&quot;number&quot;:9,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;mendoubia&quot;,&quot;name&quot;:&quot;Сад Мендубия&quot;,&quot;category&quot;:&quot;walk&quot;,&quot;lon&quot;:-5.8142899,&quot;lat&quot;:35.7850337,&quot;description&quot;:&quot;Зелёная пауза рядом с мединой и Гранд-Сокко. Режим доступа на сегодня не подтверждён.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/way/48610278&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/en/travel/tangier/medina&quot;,&quot;positionNote&quot;:&quot;Ориентир внутри сада, не вход&quot;,&quot;number&quot;:10,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;marina&quot;,&quot;name&quot;:&quot;Tanja Marina Bay&quot;,&quot;category&quot;:&quot;busy&quot;,&quot;lon&quot;:-5.79783,&quot;lat&quot;:35.7847546,&quot;description&quot;:&quot;Марина с кафе, ресторанами и прогулочной зоной у воды.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/node/6191266619&quot;,&quot;source&quot;:&quot;https://fr.tanger.ma/sites/tanja-marina-bay/&quot;,&quot;positionNote&quot;:&quot;Ориентир в марине&quot;,&quot;number&quot;:11,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;corniche&quot;,&quot;name&quot;:&quot;Корниш / городской пляж&quot;,&quot;category&quot;:&quot;busy&quot;,&quot;lon&quot;:-5.7987656,&quot;lat&quot;:35.7776688,&quot;description&quot;:&quot;Прогулочная набережная с кафе и ресторанами. По описанию туристического офиса особенно оживлена вечером.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/way/33043376&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/fr/voyage/tanger/plage&quot;,&quot;positionNote&quot;:&quot;Ориентир на набережной&quot;,&quot;number&quot;:12,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;merkala&quot;,&quot;name&quot;:&quot;Пляж Меркала&quot;,&quot;category&quot;:&quot;walk&quot;,&quot;lon&quot;:-5.8350675,&quot;lat&quot;:35.7942651,&quot;description&quot;:&quot;Небольшой городской пляж западнее центра, прогулка у воды.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/way/40432037&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/fr/maroc-terre-de-football/fr/les-villes-hotes/tanger&quot;,&quot;positionNote&quot;:&quot;Ориентир на пляже&quot;,&quot;number&quot;:13,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;perdicaris&quot;,&quot;name&quot;:&quot;Парк Пердикарис / Рмилат&quot;,&quot;category&quot;:&quot;walk&quot;,&quot;lon&quot;:-5.8802368,&quot;lat&quot;:35.7876729,&quot;description&quot;:&quot;Лесопарк с прогулочными тропами и видами на побережье. За пределами пешего центра.&quot;,&quot;coordinateSource&quot;:&quot;https://www.openstreetmap.org/way/204810395&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/fr/maroc-terre-de-football/fr/les-villes-hotes/tanger&quot;,&quot;positionNote&quot;:&quot;Ориентир внутри парка, не вход&quot;,&quot;number&quot;:14,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;spartel&quot;,&quot;name&quot;:&quot;Маяк Кап-Спартель&quot;,&quot;category&quot;:&quot;sight&quot;,&quot;lon&quot;:-5.9237,&quot;lat&quot;:35.79104,&quot;description&quot;:&quot;Маяк у западного входа в Гибралтарский пролив и виды на Атлантику. Поездку из центра планируйте отдельно.&quot;,&quot;coordinateSource&quot;:&quot;https://mapcarta.com/31907622&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/fr/maroc-terre-de-football/fr/les-villes-hotes/tanger&quot;,&quot;positionNote&quot;:&quot;Маяк; часы и вход не проверены&quot;,&quot;number&quot;:15,&quot;checked&quot;:&quot;2026-09-24&quot;},{&quot;id&quot;:&quot;hercules&quot;,&quot;name&quot;:&quot;Геркулесовы пещеры&quot;,&quot;category&quot;:&quot;sight&quot;,&quot;lon&quot;:-5.939242,&quot;lat&quot;:35.759995,&quot;description&quot;:&quot;Пещеры на атлантическом побережье к югу от Кап-Спартеля. Доступ и стоимость требуют проверки.&quot;,&quot;coordinateSource&quot;:&quot;https://www.communesmaroc.com/en/commune/tanger/spot/view/les-grottes-d-hercules&quot;,&quot;source&quot;:&quot;https://www.visitmorocco.com/fr/voyage/tanger&quot;,&quot;positionNote&quot;:&quot;Пещеры&quot;,&quot;number&quot;:16,&quot;checked&quot;:&quot;2026-09-24&quot;}];
   const lineButtons = root.querySelector(&#x27;#tgr-lines&#x27;);
   const multiple = root.querySelector(&#x27;#tgr-multiple&#x27;);
   const city = root.querySelector(&#x27;#tgr-city&#x27;);
@@ -1686,11 +1707,15 @@ html&gt;body{padding:0}&lt;/style&gt;
   const routeLayer=svg.append(&#x27;g&#x27;);
   const stopLayer=svg.append(&#x27;g&#x27;);
   const labelLayer=svg.append(&#x27;g&#x27;).attr(&#x27;pointer-events&#x27;,&#x27;none&#x27;);
+  const poiLayer=svg.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-poi-layer&#x27;);
   const locationLayer=svg.append(&#x27;g&#x27;).attr(&#x27;pointer-events&#x27;,&#x27;none&#x27;);
   const scaleLayer=svg.append(&#x27;g&#x27;).attr(&#x27;pointer-events&#x27;,&#x27;none&#x27;);
   let mode=&#x27;multiple&#x27;,active=[],activeStops=[],width=0,height=0,baseProjection,currentProjection,path;
   let userLocation=null;
   let transform=d3.zoomIdentity,selectedStop=null,pressPoint=null;
+  const poiCategories=new Set([&#x27;sight&#x27;,&#x27;busy&#x27;,&#x27;walk&#x27;]);
+  let selectedPOI=null;
+  const poiColors={sight:&#x27;#b65c10&#x27;,busy:&#x27;#a83b83&#x27;,walk:&#x27;#16846a&#x27;};
   const zoom=d3.zoom().scaleExtent([0.65,55]).on(&#x27;zoom&#x27;,event=&gt;{transform=event.transform;draw();});
   svg.call(zoom).on(&#x27;dblclick.zoom&#x27;,null);
   root.querySelector(&#x27;#tgr-plus&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;svg.call(zoom.scaleBy,1.65));
@@ -1753,6 +1778,59 @@ html&gt;body{padding:0}&lt;/style&gt;
     locationLayer.append(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-location-accuracy&#x27;).attr(&#x27;d&#x27;,path(area)).attr(&#x27;fill&#x27;,&#x27;var(--viz-series-1)&#x27;).attr(&#x27;opacity&#x27;,0.16);
     locationLayer.append(&#x27;circle&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-location-marker&#x27;).attr(&#x27;cx&#x27;,p[0]).attr(&#x27;cy&#x27;,p[1]).attr(&#x27;r&#x27;,7).attr(&#x27;fill&#x27;,&#x27;var(--viz-series-1)&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--background)&#x27;).attr(&#x27;stroke-width&#x27;,3);
   }
+
+  function focusPOI(poi){
+    if(!baseProjection)return;
+    const p=baseProjection([poi.lon,poi.lat]),k=Math.min(55,Math.max(1,700000/baseProjection.scale()));
+    svg.call(zoom.transform,d3.zoomIdentity.translate(width/2-k*p[0],height/2-k*p[1]).scale(k));
+  }
+  function showPOI(poi,focus=false){
+    selectedPOI=poi.id;
+    const card=root.querySelector(&#x27;#tgr-poi-card&#x27;);card.replaceChildren();card.hidden=false;
+    const close=document.createElement(&#x27;button&#x27;);close.className=&#x27;btn btn-ghost poi-close&#x27;;close.type=&#x27;button&#x27;;close.textContent=&#x27;Закрыть&#x27;;
+    close.onclick=()=&gt;{selectedPOI=null;card.hidden=true;draw();};card.append(close);
+    const title=document.createElement(&#x27;h3&#x27;);title.textContent=poi.number+&#x27;. &#x27;+poi.name;card.append(title);
+    const description=document.createElement(&#x27;p&#x27;);description.textContent=poi.description;card.append(description);
+    const note=document.createElement(&#x27;p&#x27;);note.className=&#x27;text-small text-muted&#x27;;note.textContent=poi.positionNote+&#x27; · справка 24.09.2026&#x27;;card.append(note);
+    const links=document.createElement(&#x27;div&#x27;);links.className=&#x27;poi-links&#x27;;
+    for(const [label,url] of [
+      [&#x27;Google Maps&#x27;,&#x27;https://www.google.com/maps/search/?api=1&amp;query=&#x27;+poi.lat+&#x27;,&#x27;+poi.lon],
+      [&#x27;Как дойти&#x27;,&#x27;https://www.google.com/maps/dir/?api=1&amp;destination=&#x27;+poi.lat+&#x27;,&#x27;+poi.lon+&#x27;&amp;travelmode=walking&#x27;],
+      [&#x27;О месте&#x27;,poi.source],[&#x27;Координаты&#x27;,poi.coordinateSource]
+    ]){const a=document.createElement(&#x27;a&#x27;);a.textContent=label;a.href=url;a.target=&#x27;_blank&#x27;;a.rel=&#x27;noopener&#x27;;links.append(a);}
+    card.append(links);
+    if(focus)focusPOI(poi);else draw();
+    card.scrollIntoView({behavior:&#x27;smooth&#x27;,block:&#x27;nearest&#x27;});
+  }
+  function drawPOIs(){
+    const shown=pois.filter(d=&gt;poiCategories.has(d.category)).map(d=&gt;({...d,p:currentProjection([d.lon,d.lat])})).filter(d=&gt;inside(d.p,16));
+    const markers=poiLayer.selectAll(&#x27;g&#x27;).data(shown,d=&gt;d.id).join(enter=&gt;{
+      const g=enter.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-poi-marker&#x27;).attr(&#x27;role&#x27;,&#x27;button&#x27;).attr(&#x27;tabindex&#x27;,0);
+      g.append(&#x27;circle&#x27;).attr(&#x27;r&#x27;,15).attr(&#x27;stroke&#x27;,&#x27;var(--background)&#x27;).attr(&#x27;stroke-width&#x27;,2);
+      g.append(&#x27;text&#x27;).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).attr(&#x27;dy&#x27;,&#x27;0.35em&#x27;);g.append(&#x27;title&#x27;);return g;
+    });
+    markers.attr(&#x27;transform&#x27;,d=&gt;&#x27;translate(&#x27;+d.p[0]+&#x27;,&#x27;+d.p[1]+&#x27;)&#x27;).attr(&#x27;aria-label&#x27;,d=&gt;d.number+&#x27;. &#x27;+d.name).attr(&#x27;aria-pressed&#x27;,d=&gt;String(selectedPOI===d.id))
+      .on(&#x27;click&#x27;,(event,d)=&gt;{event.stopPropagation();showPOI(d);})
+      .on(&#x27;keydown&#x27;,(event,d)=&gt;{if(event.key===&#x27;Enter&#x27;||event.key===&#x27; &#x27;){event.preventDefault();event.stopPropagation();showPOI(d);}});
+    markers.select(&#x27;circle&#x27;).attr(&#x27;fill&#x27;,d=&gt;poiColors[d.category]).attr(&#x27;r&#x27;,d=&gt;selectedPOI===d.id?18:15);
+    markers.select(&#x27;text&#x27;).text(d=&gt;d.number);markers.select(&#x27;title&#x27;).text(d=&gt;d.name);
+  }
+  function updatePOIList(){
+    const list=root.querySelector(&#x27;#tgr-poi-list&#x27;);list.replaceChildren();
+    const shown=pois.filter(d=&gt;poiCategories.has(d.category));root.querySelector(&#x27;#tgr-poi-count&#x27;).textContent=shown.length+&#x27; из &#x27;+pois.length;
+    for(const poi of shown){const b=document.createElement(&#x27;button&#x27;);b.type=&#x27;button&#x27;;b.className=&#x27;btn btn-outline&#x27;;b.textContent=poi.number+&#x27;. &#x27;+poi.name;b.style.borderColor=poiColors[poi.category];b.onclick=()=&gt;showPOI(poi,true);list.append(b);}
+    if(!shown.length){const p=document.createElement(&#x27;p&#x27;);p.textContent=&#x27;Включите категорию, чтобы показать места.&#x27;;list.append(p);}
+  }
+  root.querySelector(&#x27;#tgr-poi-filters&#x27;).addEventListener(&#x27;change&#x27;,event=&gt;{
+    if(event.target.checked)poiCategories.add(event.target.value);else poiCategories.delete(event.target.value);
+    if(selectedPOI&amp;&amp;!poiCategories.has(pois.find(p=&gt;p.id===selectedPOI).category)){selectedPOI=null;root.querySelector(&#x27;#tgr-poi-card&#x27;).hidden=true;}
+    updatePOIList();draw();
+  });
+  root.querySelector(&#x27;#tgr-center&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{
+    const center=[-5.807,35.784],p=baseProjection(center),k=Math.min(55,Math.max(1,550000/baseProjection.scale()));
+    svg.call(zoom.transform,d3.zoomIdentity.translate(width/2-k*p[0],height/2-k*p[1]).scale(k));
+  });
+  updatePOIList();
 
   function choose(){
     mode=selectedRefs.size===1?[...selectedRefs][0]:&#x27;multiple&#x27;;selectedStop=null;stopDetail.replaceChildren();
@@ -1819,7 +1897,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       const shown=activeStops.map(id=&gt;({id,p:currentProjection(data.stops[id])})).filter(d=&gt;inside(d.p,5));
       stopLayer.selectAll(&#x27;circle&#x27;).data(shown).join(&#x27;circle&#x27;).attr(&#x27;class&#x27;,&#x27;tgr-stop&#x27;).attr(&#x27;cx&#x27;,d=&gt;d.p[0]).attr(&#x27;cy&#x27;,d=&gt;d.p[1]).attr(&#x27;r&#x27;,d=&gt;d.id===selectedStop?6:3.2).attr(&#x27;stroke&#x27;,color(mode));
     }
-    drawLabels();drawLocation();drawScale();
+    drawLabels();drawPOIs();drawLocation();drawScale();
     svg.attr(&#x27;data-ready&#x27;,&#x27;true&#x27;).attr(&#x27;data-mode&#x27;,mode).attr(&#x27;data-route-count&#x27;,new Set(active.map(r=&gt;r.ref)).size).attr(&#x27;data-stop-count&#x27;,activeStops.length);
   }
   function drawLabels(){
@@ -1882,6 +1960,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
   svg.on(&#x27;pointerdown.tgr&#x27;,event=&gt;{pressPoint=[event.clientX,event.clientY];});
   svg.on(&#x27;click.tgr&#x27;,event=&gt;{
+    if(event.target.closest(&#x27;.tgr-poi-marker&#x27;))return;
     if(!pressPoint||Math.hypot(event.clientX-pressPoint[0],event.clientY-pressPoint[1])&gt;6||!currentProjection)return;
     const p=d3.pointer(event,svg.node());
     if(activeStops.length){
@@ -2644,3 +2723,4 @@ html&gt;body{padding:0}&lt;/style&gt;
 </script>
 </body>
 </html>
+
